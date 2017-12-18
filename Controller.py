@@ -6,12 +6,12 @@ class Lock:
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(18,GPIO.OUT)
-        p = GPIO.PWM(18,50)
-        p.start(5)
+        self.p = GPIO.PWM(18,50)
+        self.p.start(5)
 
     def change_lock_position(self, angle):
         duty = float(angle) / 10.0 + 2.5
-        p.ChangeDutyCycle(duty)
+        self.p.ChangeDutyCycle(duty)
         time.sleep(2)
 
 lock = Lock()
