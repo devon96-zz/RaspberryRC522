@@ -35,4 +35,4 @@ reader = NFCReader()
 
 while True:
     reader.read()
-    lock.change_lock_position(randint(0,180))
+    lock.change_lock_position(randint(0,90))
