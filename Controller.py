@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 from random import randint
+import SimpleMFRC522
 
 class Lock:
     def __init__(self):
