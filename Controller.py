@@ -2,19 +2,21 @@ import RPi.GPIO as GPIO
 import time
 import SimpleMFRC522
 
-OPEN = 7
-CLOSED = 0
+OPEN = 5
+CLOSED = 10
 
 class Lock:
     def __init__(self):
-        self.status = 0
+        self.status = 1
+        self.init_gpio()
+        self.p.start(5)
+        time.sleep(1)
 
     def init_gpio(self):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(18,GPIO.OUT)
         self.p = GPIO.PWM(18,50)
-        self.p.start(5)
 
     def change_lock_position(self):
         self.init_gpio()
