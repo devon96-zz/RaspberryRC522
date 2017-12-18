@@ -6,20 +6,22 @@ OPEN = 7
 CLOSED = 0
 
 class Lock:
-    status = 0
+    def __init__(self):
+        self.status = 0
+
     def init_gpio(self):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(18,GPIO.OUT)
         self.p = GPIO.PWM(18,50)
-        self.p.start(0)
+        self.p.start(5)
 
     def change_lock_position(self):
         self.init_gpio()
         time.sleep(1)
 
         duty = 0
-        if self.status:
+        if self.status==1:
             duty = CLOSED
             self.status = 0
         else:
@@ -29,6 +31,7 @@ class Lock:
         self.p.ChangeDutyCycle(duty)
         time.sleep(1)
         GPIO.cleanup()
+        time.sleep(0.5)
 
 class NFCReader:
     def __init__(self):
@@ -51,4 +54,4 @@ while True:
     if card_content=="Open!":
         lock.change_lock_position()
     else:
-        print "WRONG CARD!"
+        print "WRONG CARD!\n"
