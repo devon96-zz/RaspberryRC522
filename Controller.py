@@ -17,6 +17,7 @@ class Lock:
         duty = float(angle) / 10.0 + 2.5
         self.p.ChangeDutyCycle(duty)
         time.sleep(1)
+        GPIO.cleanup()
 
 class NFCReader:
     def __init__(self):
