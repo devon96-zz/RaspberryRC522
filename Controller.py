@@ -4,7 +4,7 @@ from random import randint
 import SimpleMFRC522
 
 class Lock:
-    def __init__(self):
+    def init_gpio(self):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(18,GPIO.OUT)
@@ -12,6 +12,7 @@ class Lock:
         self.p.start(5)
 
     def change_lock_position(self, angle):
+        self.init_gpio()
         time.sleep(1)
         duty = float(angle) / 10.0 + 2.5
         self.p.ChangeDutyCycle(duty)
