@@ -1,20 +1,31 @@
 import RPi.GPIO as GPIO
 import time
-from random import randint
 import SimpleMFRC522
 
+OPEN = 7
+CLOSED = 0
+
 class Lock:
+    self.status = 0
     def init_gpio(self):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(18,GPIO.OUT)
         self.p = GPIO.PWM(18,50)
-        self.p.start(5)
+        self.p.start(0)
 
-    def change_lock_position(self, angle):
+    def change_lock_position(self):
         self.init_gpio()
         time.sleep(1)
-        duty = float(angle) / 10.0 + 2.5
+
+        duty = 0
+        if self.status:
+            duty = CLOSED
+            self.status = 0
+        else:
+            duty = OPEN
+            self.status = 1
+
         self.p.ChangeDutyCycle(duty)
         time.sleep(1)
         GPIO.cleanup()
@@ -30,10 +41,13 @@ class NFCReader:
             print(text)
         finally:
             GPIO.cleanup()
+            return text
 
 lock = Lock()
 reader = NFCReader()
 
 while True:
-    reader.read()
-    lock.change_lock_position(randint(0,90))
+    if reader.read()=="Open!":
+        lock.change_lock_position()
+    else:
+        print "WRONG CARD!"
