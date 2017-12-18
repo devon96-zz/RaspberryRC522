@@ -47,9 +47,7 @@ lock = Lock()
 reader = NFCReader()
 
 while True:
-    card_content = reader.read()[1:]
-    print repr(card_content)
-    print card_content=="Open!"
+    card_content = reader.read().strip()
     if card_content=="Open!":
         lock.change_lock_position()
     else:
