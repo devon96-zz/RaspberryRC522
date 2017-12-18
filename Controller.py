@@ -7,9 +7,10 @@ import pigpio
 class Lock:
     def __init__(self):
         self.status = 1
-        self.pi = pigpio.pi()
 
     def change_lock_position(self):
+        pi = pigpio.pi()
+
         duty = 0
         if self.status == 1:
             duty = 1000
@@ -18,10 +19,10 @@ class Lock:
             duty = 2000
             self.status = 1
 
-        self.pi.set_servo_pulsewidth(18, duty)
+        pi.set_servo_pulsewidth(18, duty)
         time.sleep(0.5)
-        self.pi.set_servo_pulsewidth(18, 0)
-        self.pi.stop()
+        pi.set_servo_pulsewidth(18, 0)
+        pi.stop()
 
 
 class NFCReader:
