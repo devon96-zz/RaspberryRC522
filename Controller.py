@@ -27,7 +27,7 @@ class Lock:
 
     def return_status(self):
         if self.status == 1:
-            return "close"
+            return "closed"
         else:
             return "open"
 
