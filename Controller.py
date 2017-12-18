@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import sys
 import SimpleMFRC522
 import pigpio
 
@@ -53,3 +54,4 @@ while True:
             print "WRONG CARD!"
     except KeyboardInterrupt:
         GPIO.cleanup()
+        sys.exit()
