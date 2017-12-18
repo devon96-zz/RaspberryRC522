@@ -24,6 +24,12 @@ class Lock:
         pi.set_servo_pulsewidth(18, 0)
         pi.stop()
 
+    def return_status(self):
+        if self.status == 1:
+            return "close"
+        else:
+            return "open"
+
 
 class NFCReader:
     def __init__(self):
@@ -41,9 +47,9 @@ while True:
     try:
         card_content = reader.read().strip()
         if card_content == "Open!":
-            print "CARD ACCEPTED!\n"
+            print "Bike lock is now: %s!" % (lock.return_status())
             lock.change_lock_position()
         else:
-            print "WRONG CARD!\n"
+            print "WRONG CARD!"
     except KeyboardInterrupt:
         GPIO.cleanup()
