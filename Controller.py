@@ -1,16 +1,19 @@
 import RPi.GPIO as GPIO
 import time
 
-def change_lock_position(angle):
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(18,GPIO.OUT)
-    p = GPIO.PWM(18,50)
-    p.start(7.5)
-    duty = float(angle) / 10.0 + 2.5
-    p.ChangeDutyCycle(duty)
+class Lock:
+    def __init__(self):
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(18,GPIO.OUT)
+        p = GPIO.PWM(18,50)
+        p.start(5)
 
-change_lock_position(90)
-time.sleep(1)
-change_lock_position(0)
-time.sleep(0)
+    def change_lock_position(self, angle):
+        duty = float(angle) / 10.0 + 2.5
+        p.ChangeDutyCycle(duty)
+        time.sleep(2)
+
+lock = Lock()
+for i in range(0,180,15):
+    lock.change_lock_position(i)
