@@ -6,7 +6,7 @@ OPEN = 7
 CLOSED = 0
 
 class Lock:
-    self.status = 0
+    status = 0
     def init_gpio(self):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
