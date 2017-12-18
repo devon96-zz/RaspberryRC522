@@ -9,14 +9,14 @@ class Lock:
     def __init__(self):
         self.status = 1
         self.init_gpio()
-        self.p.start(5)
-        time.sleep(1)
 
     def init_gpio(self):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(18,GPIO.OUT)
         self.p = GPIO.PWM(18,50)
+        self.p.start(5)
+        time.sleep(1)
 
     def change_lock_position(self):
         self.init_gpio()
@@ -24,10 +24,10 @@ class Lock:
 
         duty = 0
         if self.status==1:
-            duty = CLOSED
+            duty = 10
             self.status = 0
         else:
-            duty = OPEN
+            duty = 5
             self.status = 1
 
         self.p.ChangeDutyCycle(duty)
