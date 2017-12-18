@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+from random import randint
 
 class Lock:
     def __init__(self):
@@ -10,10 +11,26 @@ class Lock:
         self.p.start(5)
 
     def change_lock_position(self, angle):
+        time.sleep(1)
         duty = float(angle) / 10.0 + 2.5
         self.p.ChangeDutyCycle(duty)
-        time.sleep(2)
+        time.sleep(1)
+
+class NFCReader:
+    def __init__(self):
+        self.reader = SimpleMFRC522.SimpleMFRC522()
+
+    def read(self):
+        try:
+            id, text = self.reader.read()
+            print(id)
+            print(text)
+        finally:
+            GPIO.cleanup()
 
 lock = Lock()
-for i in range(0,180,15):
-    lock.change_lock_position(i)
+reader = NFCReader()
+
+while True:
+    reader.read()
+    lock.change_lock_position(randint(0,180))
