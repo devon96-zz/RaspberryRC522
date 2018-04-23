@@ -6,52 +6,20 @@ import pigpio
 
 
 class Lock:
-    def __init__(self):
-        self.status = 1
-
-    def change_lock_position(self):
+    def move_lock(self, degrees):
         pi = pigpio.pi()
-
-        duty = 0
-        if self.status == 1:
-            duty = 1000
-            self.status = 0
-        else:
-            duty = 2000
-            self.status = 1
-
+        duty = int((degrees / 180.0) * 1850.0 + 500.0)
         pi.set_servo_pulsewidth(18, duty)
         time.sleep(0.5)
         pi.set_servo_pulsewidth(18, 0)
         pi.stop()
-
-    def return_status(self):
-        if self.status == 1:
-            return "closed"
-        else:
-            return "open"
+        GPIO.cleanup()
 
 
 class NFCReader:
     def __init__(self):
         self.reader = SimpleMFRC522.SimpleMFRC522()
 
-    def read(self):
-        text = self.reader.read()[1]
+    def read_id(self):
+        text = self.reader.read()[0]
         return text
-
-
-lock = Lock()
-reader = NFCReader()
-
-while True:
-    try:
-        card_content = reader.read().strip()
-        if card_content == "Open!":
-            print "Bike lock is now: %s!" % (lock.return_status())
-            lock.change_lock_position()
-        else:
-            print "WRONG CARD!"
-    except KeyboardInterrupt:
-        GPIO.cleanup()
-        sys.exit()
