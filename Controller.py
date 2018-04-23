@@ -23,3 +23,5 @@ class NFCReader:
     def read_id(self):
         text = self.reader.read()[0]
         return text
+reader = NFCReader()
+print(reader.read_id())

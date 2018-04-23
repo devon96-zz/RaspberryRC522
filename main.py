@@ -5,7 +5,7 @@ from Controller import Lock
 from Controller import NFCReader
 
 LOCKER_ID = 1
-DEBUG = True
+DEBUG = False
 
 
 class Locker():
@@ -20,8 +20,9 @@ class Locker():
 
 def main_loop():
     while True:
+        reader = NFCReader()
         # Here scanner will get card's hash
-        cardID = NFCReader.read_id()
+        cardID = reader.read_id()
 
         # Backend URL to verify access request
         post_fields = {'locker_id': str(locker.locker_id),
@@ -29,9 +30,15 @@ def main_loop():
         r = requests.post(url=url, json=post_fields)
 
         # TODO: Include actual motor handling functions below
+        print(r.status_code)
         if r.status_code == 200:
             logger.info("Access granted for card %s" % cardID)
             locker.locked = r.json()['status']
+            servo = Lock()
+            if locker.locked:
+                servo.move_lock(0)
+            else:
+                servo.move_lock(180)
             # Beep positively and change doors position
         else:
             logger.info("Access denied for card %s" % cardID)
@@ -52,6 +59,8 @@ if __name__ == "__main__":
     logger.setLevel(logging.INFO)
 
     locker = Locker()
+    locker.locker_id = 1
+    locker.save_values()
     with open('locker.p', 'rb') as file:
         locker = pickle.load(file)
 
